@@ -1,4 +1,5 @@
 from __future__ import division
+import re
 from curses.ascii import isdigit
 from nltk.corpus import cmudict
 d = cmudict.dict()
@@ -11,10 +12,8 @@ def nsyl(word):
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
     # Algorithm via http://runningwithdata.com/post/3576752158/w
 
-print "concatenate:"
-print nsyl("concatenate")
 
-
+# Still needs code for fallback when a word isn't found in cmudict
 def rhyme(word1, word2):
     reverse_word1 = max(d[word1.lower()], key=len)
     reverse_word1.reverse()
@@ -26,7 +25,21 @@ def rhyme(word1, word2):
                 return True
     return False
 
+
+def tokenize(file_path, array):
+    with open(file_path) as f:
+        data = f.read()
+        data = re.sub("[^a-zA-Z\s-]", '', data)
+        data = re.sub("\s+", " ", data)
+        words = re.split("\s|-", data)
+        array += words
+    if array[0] == '': del array[0]
+    if array[-1] == '': del array[-1]
+
 # Tests:
+# print "concatenate:"
+# print nsyl("concatenate")
+
 # print "do test and best rhyme?"
 # print rhyme("test", "best")
 
