@@ -5,6 +5,10 @@ from nltk.corpus import cmudict
 d = cmudict.dict()
 
 
+def phonemes(word):
+    return max(d[word.lower()], key=len)
+
+
 def nsyl(word):
     # return the max syllable count in the case of multiple pronunciations
     return max([len([y for y in x if isdigit(y[-1])]) for x in d[word.lower()]])
@@ -24,6 +28,20 @@ def rhyme(word1, word2):
         if isdigit(v[-1]):
             if reverse_word1[:i] == reverse_word2[:i]:
                 return True
+    return False
+
+
+def rhyme_from_phonemes(word1, word2):  # Oh god refactor
+    word1.reverse()
+    word2.reverse()
+    for i, v in enumerate(word1):
+        if isdigit(v[-1]):
+            if word1[:i] == word2[:i]:
+                word1.reverse()  # Necessary, but surely there's a better way
+                word2.reverse()
+                return True
+    word1.reverse()
+    word2.reverse()
     return False
 
 

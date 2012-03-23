@@ -1,4 +1,4 @@
-### On the structure of a limericks
+## On the structure of a limericks
 
 Limericks have a fairly loose form. The rhyme scheme and syllable count is typically something like this:
 
@@ -12,7 +12,7 @@ And as if that weren't loosey-goosey enough, they can have either anapaestic met
 
 So, I chose an old favorite as the canonical example to work from when building this limerick detector:
 
-## God in the Quad  
+### God in the Quad  
 by Ronald Knox
 
 > There was a young man who said "God  
@@ -45,7 +45,7 @@ So, we're looking for limericks with the following structure, because if it was 
 > duh duh DUM duh duh DUM duh duh DUM
 
 
-### How to use
+## How to use
 
 Written with Python 2.7.2, using the awesome nltk library and its CMU pronunciation dictionary. 
 
