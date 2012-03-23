@@ -9,6 +9,7 @@ def nsyl(word):
     # return the max syllable count in the case of multiple pronunciations
     return max([len([y for y in x if isdigit(y[-1])]) for x in d[word.lower()]])
     # For example: d["concatenate".lower()] == [['K', 'AH0', 'N', 'K', 'AE1', 'T', 'AH0', 'N', 'EY2', 'T']]
+    # Oh, and those numbers are actually stress/inflection (0: no stress, 1: primary stress, 2: secondary stress)
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
     # Algorithm via http://runningwithdata.com/post/3576752158/w
 
@@ -36,12 +37,7 @@ def tokenize(file_path, array):
     if array[0] == '': del array[0]
     if array[-1] == '': del array[-1]
 
-# Tests:
-# print "concatenate:"
-# print nsyl("concatenate")
-
-# print "do test and best rhyme?"
-# print rhyme("test", "best")
-
-# print "do store and rapport rhyme?"
-# print rhyme("store", "rapport")
+# Thinking about inflection:
+# In "there once" [was a man from Nantucket], I'd want to see that "there" is unstressed, and "once" is stressed
+# But cmudict sees the single vowel in each of them as 1 (primary stress), because it looks at each word in isolation
+# Maybe for now just assume than monosyllabic words are flexible, and use cmudict for stress on polysyllabic words?
