@@ -48,7 +48,7 @@ def rhyme_from_phonemes(list1, list2):  # Oh god refactor
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read()
-        data = re.sub("'\w{1,2}", '', data)
+        data = re.sub("'[a-z]{1,2}", '', data)  # This means that the final output gets screwed up, TODO fix it
         data = re.sub("[^a-zA-Z\s-]", '', data)
         data = re.sub("\s+", " ", data)
         array = re.split("\s|-", data)

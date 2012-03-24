@@ -4,60 +4,57 @@ import poetry
 tokens = poetry.tokenize("knox.txt")
 
 
-def not_haiku(maybe_nsyl, sylct):  # return true if the word would overflow the line
-    if maybe_nsyl < 8 and sylct > 8 - maybe_nsyl:
+def not_haiku(syllable_counter, current_sylct):  # return true if the word would overflow the line
+    if syllable_counter < 8 and current_sylct > 8 - syllable_counter:
         return True
-    elif maybe_nsyl < 16 and sylct > 16 - maybe_nsyl:
+    elif syllable_counter < 16 and current_sylct > 16 - syllable_counter:
         return True
-    elif maybe_nsyl < 21 and sylct > 21 - maybe_nsyl:
+    elif syllable_counter < 21 and current_sylct > 21 - syllable_counter:
         return True
-    elif maybe_nsyl < 27 and sylct > 27 - maybe_nsyl:
+    elif syllable_counter < 27 and current_sylct > 27 - syllable_counter:
         return True
-    elif maybe_nsyl < 36 and sylct > 36 - maybe_nsyl:
+    elif syllable_counter < 36 and current_sylct > 36 - syllable_counter:
         return True
     return False
 
 
 limericks = []
-maybe = []
-maybe_nsyl = []
-maybe_list = []
-for i, w in enumerate(tokens):
-    maybe.append([w])  # Holds the actual words of the potential limerick
-    maybe_nsyl.append(poetry.nsyl(w))  # Syllable counter
-    maybe_list.append(poetry.phonemes(w))  # List of lists of phonemes for each word
+word_arrays = []
+syllable_counters = []
+phoneme_arrays = []
+i = 0
+while i < len(tokens) - 35:
+    start_word = tokens[i]
+    word_arrays.append([start_word])  # Holds the actual words of the potential limerick
+    syllable_counters.append(poetry.nsyl(start_word))
     n = i + 1
     give_up = False
     rhyme_scheme = {}  # Tracks the rhyme scheme
-    while not give_up and n < len(tokens):
-        print tokens[n]
+    while n < len(tokens):
         sylct = poetry.nsyl(tokens[n])
-        give_up = not_haiku(maybe_nsyl[i], sylct)  # break out if a word overflows the line
-        maybe[i].append(tokens[n])
-        print maybe[i]
-        maybe_nsyl[i] += sylct
+        if not_haiku(syllable_counters[i], sylct): break  # break out if a word overflows the line
+        word_arrays[i].append(tokens[n])
+        syllable_counters[i] += sylct
         phonemes = poetry.phonemes(tokens[n])
-        maybe_list[i].append(phonemes)
-        if maybe_nsyl[i] == 8:
+        if syllable_counters[i] == 8:
             rhyme_scheme['A'] = phonemes
-            maybe[i].append("\n")
-        elif maybe_nsyl[i] == 16:
-            maybe[i].append("\n")
-            if not poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
-                give_up = True
-        elif maybe_nsyl[i] == 21:
+            word_arrays[i].append("\n")
+        elif syllable_counters[i] == 16:
+            word_arrays[i].append("\n")
+            if not poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes): break
+        elif syllable_counters[i] == 21:
             rhyme_scheme['B'] = phonemes
-            maybe[i].append("\n")
-        elif maybe_nsyl[i] == 27:
-            maybe[i].append("\n")
-            if not poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes):
-                give_up = True
-        elif maybe_nsyl[i] == 36:
+            word_arrays[i].append("\n")
+        elif syllable_counters[i] == 27:
+            word_arrays[i].append("\n")
+            if not poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes): break
+        elif syllable_counters[i] == 36:
             if poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
-                limericks.append(maybe[i])
-            give_up = True
+                limericks.append(word_arrays[i])
+            break
         n += 1
+    i += 1
 
 for limerick in limericks:
-    " ".join(limerick)
+    limerick = " ".join(limerick)
     print limerick
