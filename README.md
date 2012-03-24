@@ -26,6 +26,8 @@ Going by the canonical example above, Nantucket is set to look for limericks wit
 > B (5)   
 > A (9)  
   
+And eventually will look for the following meter as well:
+  
 > duh DUM duh duh DUM duh duh DUM  
 > duh DUM duh duh DUM duh duh DUM  
 > duh DUM duh duh DUM   
@@ -34,7 +36,11 @@ Going by the canonical example above, Nantucket is set to look for limericks wit
 
 ## Example results
 
+Actually, this is interesting. I get very different results in the first draft (which entirely skipped all potential limericks that contained words not found in cmudict) and the second draft (which allows non-cmudict words to be in limericks, but not at the end of lines).
+
 From *Swann's Way* by Proust:
+
+In the first draft:
 
 > would be saying What can he be  
 > doing just now I do hope he  
@@ -54,8 +60,38 @@ From *Swann's Way* by Proust:
 > a third Yes if you  
 > like I must just keep in the line for
 
-From Genesis:
+In the second draft:
 
+> bad conduct should deserve Was I  
+> then not yet aware that what I  
+> felt myself for her  
+> depended neither  
+> upon her actions nor upon my  
+  
+> was wonderful to another  
+> How I should have loved to We were  
+> unfortunate to  
+> a third Yes if you  
+> like I must just keep in the line for
+
+From *Genesis*:
+
+In the first draft:
+
+> in the iniquity of the  
+> city And while he lingered the  
+> men laid hold upon  
+> his hand and upon  
+> the hand of his wife and upon the
+
+In the second draft: 
+
+> and fetcht a calf tender and good and  
+> gave it unto a young man and  
+> he hasted to dress it And  
+> he took butter and  
+> milk and the calf which he had dressed and
+ 
 > in the iniquity of the  
 > city And while he lingered the  
 > men laid hold upon  
@@ -65,8 +101,7 @@ From Genesis:
 
 ## TODO
 
-stop the tokenizer regex from screwing up output  
-handle words not found in cmudict  
+handle words not found in cmudict at line-ends as well (read: implement last-syllable grapheme-to-phoneme translation, in Arpabet format to match the cmudict results)
 take meter into account  
 make it more generally usable  
 maybe make it worth with different limerick formats qua different strategies one can choose
