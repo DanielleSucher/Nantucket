@@ -31,29 +31,30 @@ def rhyme(word1, word2):
     return False
 
 
-def rhyme_from_phonemes(word1, word2):  # Oh god refactor
-    word1.reverse()
-    word2.reverse()
-    for i, v in enumerate(word1):
+def rhyme_from_phonemes(list1, list2):  # Oh god refactor
+    list1.reverse()
+    list2.reverse()
+    for i, v in enumerate(list1):
         if isdigit(v[-1]):
-            if word1[:i] == word2[:i]:
-                word1.reverse()  # Necessary, but surely there's a better way
-                word2.reverse()
-                return True
-    word1.reverse()
-    word2.reverse()
-    return False
+            if list1[:i] == list2[:i]:
+                rhymes = True
+            else:
+                rhymes = False
+    list1.reverse()
+    list2.reverse()
+    return rhymes
 
 
-def tokenize(file_path, array):
+def tokenize(file_path):
     with open(file_path) as f:
         data = f.read()
+        data = re.sub("'\w{1,2}", '', data)
         data = re.sub("[^a-zA-Z\s-]", '', data)
         data = re.sub("\s+", " ", data)
-        words = re.split("\s|-", data)
-        array += words
+        array = re.split("\s|-", data)
     if array[0] == '': del array[0]
     if array[-1] == '': del array[-1]
+    return array
 
 # Thinking about inflection:
 # In "there once" [was a man from Nantucket], I'd want to see that "there" is unstressed, and "once" is stressed
