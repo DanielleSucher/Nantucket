@@ -6,13 +6,13 @@ d = cmudict.dict()
 
 
 def phonemes(word):
-    return max(d[word.lower()], key=len)
+    return min(d[word.lower()], key=len)
 
 
 def nsyl(word):
     if not word.lower() in d: return False
-    # return the max syllable count in the case of multiple pronunciations
-    return max([len([y for y in x if isdigit(y[-1])]) for x in d[word.lower()]])
+    # return the min syllable count in the case of multiple pronunciations
+    return min([len([y for y in x if isdigit(y[-1])]) for x in d[word.lower()]])
     # For example: d["concatenate".lower()] == [['K', 'AH0', 'N', 'K', 'AE1', 'T', 'AH0', 'N', 'EY2', 'T']]
     # Oh, and those numbers are actually stress/inflection (0: no stress, 1: primary stress, 2: secondary stress)
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
@@ -22,9 +22,9 @@ def nsyl(word):
 # Still needs code for fallback when a word isn't found in cmudict
 # oops, need to ignore digit char of vowel string, because stress is irrelevant to rhyming
 def rhyme(word1, word2):
-    reverse_word1 = max(d[word1.lower()], key=len)
+    reverse_word1 = min(d[word1.lower()], key=len)
     reverse_word1.reverse()
-    reverse_word2 = max(d[word2.lower()], key=len)
+    reverse_word2 = min(d[word2.lower()], key=len)
     reverse_word2.reverse()
     for i, v in enumerate(reverse_word1):
         if isdigit(v[-1]):
@@ -54,7 +54,7 @@ def rhyme_from_phonemes(list1, list2):  # Oh god refactor
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read()
-        data = re.sub("'[a-z]{1,2}", '', data)  # This means that the final output gets screwed up, TODO fix it
+        data = re.sub("'[a-z]{1,2}", '', data)  # Cleans contractions, but screw up final output - TODO fix
         data = re.sub("[^a-zA-Z\s-]", '', data)
         data = re.sub("\s+", " ", data)
         array = re.split("\s|-", data)
