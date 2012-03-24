@@ -40,28 +40,6 @@ Actually, this is interesting. I get very different results in the first draft (
 
 From *Swann's Way* by Proust:
 
-In the first draft:
-
-> would be saying What can he be  
-> doing just now I do hope he  
-> doing a little  
-> work It too dreadful  
-> that a fellow with such gifts as he  
-
-> bad conduct should deserve Was I  
-> then not yet aware that what I  
-> felt myself for her  
-> depended neither  
-> upon her actions nor upon my  
-
-> was wonderful to another  
-> How I should have loved to We were  
-> unfortunate to  
-> a third Yes if you  
-> like I must just keep in the line for
-
-In the second draft:
-
 > bad conduct should deserve Was I  
 > then not yet aware that what I  
 > felt myself for her  
@@ -75,22 +53,6 @@ In the second draft:
 > like I must just keep in the line for
 
 From *Genesis*:
-
-In the first draft:
-
-> in the iniquity of the  
-> city And while he lingered the  
-> men laid hold upon  
-> his hand and upon  
-> the hand of his wife and upon the
-
-In the second draft (until I remembered to make sure the B lines didn't rhyme with the A lines, anyways...): 
-
-> and fetcht a calf tender and good and  
-> gave it unto a young man and  
-> he hasted to dress it And  
-> he took butter and  
-> milk and the calf which he had dressed and
  
 > in the iniquity of the  
 > city And while he lingered the  
