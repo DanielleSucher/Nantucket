@@ -10,6 +10,7 @@ def phonemes(word):
 
 
 def nsyl(word):
+    if not word.lower() in d: return False
     # return the max syllable count in the case of multiple pronunciations
     return max([len([y for y in x if isdigit(y[-1])]) for x in d[word.lower()]])
     # For example: d["concatenate".lower()] == [['K', 'AH0', 'N', 'K', 'AE1', 'T', 'AH0', 'N', 'EY2', 'T']]
@@ -19,6 +20,7 @@ def nsyl(word):
 
 
 # Still needs code for fallback when a word isn't found in cmudict
+# oops, need to ignore digit char of vowel string, because stress is irrelevant to rhyming
 def rhyme(word1, word2):
     reverse_word1 = max(d[word1.lower()], key=len)
     reverse_word1.reverse()
@@ -26,8 +28,10 @@ def rhyme(word1, word2):
     reverse_word2.reverse()
     for i, v in enumerate(reverse_word1):
         if isdigit(v[-1]):
-            if reverse_word1[:i] == reverse_word2[:i]:
-                return True
+                for n, m in enumerate(reverse_word2):
+                    if isdigit(m[-1]):
+                        if reverse_word1[:i+1] == reverse_word2[:n+1]:
+                            return True
     return False
 
 
@@ -36,13 +40,15 @@ def rhyme_from_phonemes(list1, list2):  # Oh god refactor
     list2.reverse()
     for i, v in enumerate(list1):
         if isdigit(v[-1]):
-            if list1[:i] == list2[:i]:
-                rhymes = True
-            else:
-                rhymes = False
-    list1.reverse()
-    list2.reverse()
-    return rhymes
+            for n, m in enumerate(list2):
+                if isdigit(m[-1]):
+                    if list1[:i+1] == list2[:n+1]:
+                        list1.reverse()
+                        list2.reverse()
+                        return True
+            list1.reverse()
+            list2.reverse()
+            return False
 
 
 def tokenize(file_path):
