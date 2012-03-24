@@ -84,7 +84,7 @@ In the first draft:
 > his hand and upon  
 > the hand of his wife and upon the
 
-In the second draft: 
+In the second draft (until I remembered to make sure the B lines didn't rhyme with the A lines, anyways...): 
 
 > and fetcht a calf tender and good and  
 > gave it unto a young man and  

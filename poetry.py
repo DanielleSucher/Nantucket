@@ -29,6 +29,8 @@ def approx_nsyl(word):
         count -= 1
     if re.search("ed(?! [a-z']+)", word.lower()):
         count -= 1
+    if re.search("es(?! [a-z']+)", word.lower()):
+        count -= 1
     if re.search("[^lr]e(?! [a-z']+)", word.lower()):
         count -= 1
     if re.search("'ve|n't", word.lower()):
