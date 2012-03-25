@@ -36,8 +36,6 @@ And eventually will look for the following meter as well:
 
 ## Example results
 
-Actually, this is interesting. I get very different results in the first draft (which entirely skipped all potential limericks that contained words not found in cmudict) and the second draft (which allows non-cmudict words to be in limericks, but not at the end of lines).
-
 From *Swann's Way* by Proust:
 
 > bad conduct should deserve Was I  
@@ -84,4 +82,4 @@ nltk.download()
 d  
 cmudict  
   
-Once you have all that... well, I'll tell you what to do once there's something to do. For the moment, it's just set to search through Swann's Way, which contains at least the three delightful accidental limericks quoted above. This is in-progress for now, sorry!
+Once you have all that... well, I'll tell you what to do once there's something to do. For the moment, it's just set to search through Swann's Way, which contains at least the two delightful accidental limericks quoted above. This is in-progress for now, sorry!
