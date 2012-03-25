@@ -19,19 +19,12 @@ def approx_nsyl(word):
     count = 0
     array = re.split("[^aeiouy]+", word.lower())
     for i, v in enumerate(array):
-        if v == '':
-            del array[i]
-    for v in array:
         if len(v) > 1 and v not in digraphs:
             count += 1
+        if v == '':
+            del array[i]
     count += len(array)
-    if re.search("ion(?! [a-z']+)", word.lower()):
-        count -= 1
-    if re.search("ed(?! [a-z']+)", word.lower()):
-        count -= 1
-    if re.search("es(?! [a-z']+)", word.lower()):
-        count -= 1
-    if re.search("[^lr]e(?! [a-z']+)", word.lower()):
+    if re.search("(?<=\w)(ion|ious|(?<!t)ed|es|[^lr]e)(?![a-z']+)", word.lower()):
         count -= 1
     if re.search("'ve|n't", word.lower()):
         count += 1
@@ -39,7 +32,6 @@ def approx_nsyl(word):
 
 
 def nsyl(word):
-    # if not word.lower() in d: return False
     # return the min syllable count in the case of multiple pronunciations
     if not word.lower() in d:
         return approx_nsyl(word)
@@ -47,46 +39,31 @@ def nsyl(word):
     # For example: d["concatenate".lower()] == [['K', 'AH0', 'N', 'K', 'AE1', 'T', 'AH0', 'N', 'EY2', 'T']]
     # Oh, and those numbers are actually stress/inflection (0: no stress, 1: primary stress, 2: secondary stress)
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
-    # Algorithm via http://runningwithdata.com/post/3576752158/w
 
 
-# Still needs code for fallback when a word isn't found in cmudict
-# oops, need to ignore digit char of vowel string, because stress is irrelevant to rhyming
-def rhyme(word1, word2):
-    reverse_word1 = min(d[word1.lower()], key=len)
-    reverse_word1.reverse()
-    reverse_word2 = min(d[word2.lower()], key=len)
-    reverse_word2.reverse()
-    for i, v in enumerate(reverse_word1):
-        if isdigit(v[-1]):
-                for n, m in enumerate(reverse_word2):
-                    if isdigit(m[-1]):
-                        if reverse_word1[:i+1] == reverse_word2[:n+1]:
-                            return True
+# TODO: handle words not found in cmudict
+# TODO: ignore digit char of vowel string, because stress is irrelevant to rhyming
+def rhyme_from_phonemes(list1, list2):  # Oh god refactor
+    i = -1
+    while i >= 0 - len(list1):
+        if isdigit(list1[i][-1]):
+            if list1[i:] == list2[i:]:
+                return True
+        i -= 1
     return False
 
 
-def rhyme_from_phonemes(list1, list2):  # Oh god refactor
-    list1.reverse()
-    list2.reverse()
-    for i, v in enumerate(list1):
-        if isdigit(v[-1]):
-            for n, m in enumerate(list2):
-                if isdigit(m[-1]):
-                    if list1[:i+1] == list2[:n+1]:
-                        list1.reverse()
-                        list2.reverse()
-                        return True
-            list1.reverse()
-            list2.reverse()
-            return False
+def rhyme(word1, word2):
+    list1 = min(d[word1.lower()], key=len)
+    list2 = min(d[word2.lower()], key=len)
+    return rhyme_from_phonemes(list1, list2)
 
 
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read()
-        data = re.sub("[^a-zA-Z\s'-]", '', data)
-        data = re.sub("'(?! [a-z]{1,2})", '', data)
+        data = re.sub("[^a-zA-Z\s-]", '', data)
+        data = re.sub("'(?![a-z]{1,2})", '', data)
         array = re.split("\s+|-", data)
     if array[0] == '': del array[0]
     if array[-1] == '': del array[-1]

@@ -1,7 +1,7 @@
 import poetry
 
 
-tokens = poetry.tokenize("genesis.txt")
+tokens = poetry.tokenize("proust-swann.txt")
 
 
 def not_limerick(syllable_counter, current_sylct):  # return true if the word would overflow the line
@@ -29,7 +29,7 @@ while i < len(tokens):
     syllable_counters.append(poetry.nsyl(start_word))
     n = i + 1
     rhyme_scheme = {}  # Tracks the rhyme scheme
-    # if not syllable_counters[i]: print start_word  #    looks for not-in-cmudict words to work from
+    # if not syllable_counters[i]: print start_word  #    looks for not-in-cmudict words for me to study from
     while n < len(tokens):
         sylct = poetry.nsyl(tokens[n])
         if not_limerick(syllable_counters[i], sylct):
@@ -49,7 +49,7 @@ while i < len(tokens):
             if not poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
                 break
         elif syllable_counters[i] == 21:
-            if not phonemes or phonemes == rhyme_scheme['A']:
+            if phonemes == rhyme_scheme['A'] or not phonemes:
                 break
             rhyme_scheme['B'] = phonemes
             word_arrays[i].append("\n")
