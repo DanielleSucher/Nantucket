@@ -50,6 +50,26 @@ From *Swann's Way* by Proust:
 > a third Yes if you  
 > like I must just keep in the line for
 
+from *Ulysses* by James Joyce:
+
+> grace about you I can give you  
+> a rare old wine that'll send you  
+> skipping to hell and  
+> back Sign a will and  
+> leave us any coin you have If you
+
+> then he tipped me just in passing  
+> but I never thought hed write making  
+> an appointment I  
+> had it inside my  
+> petticoat bodice all day reading
+
+> meant till he put his tongue in my  
+> mouth his mouth was sweetlike young I  
+> put my knee up to  
+> him a few times to
+> learn the way what did I tell him I
+
 From *Genesis*:
  
 > in the iniquity of the  
@@ -58,10 +78,18 @@ From *Genesis*:
 > his hand and upon  
 > the hand of his wife and upon the
 
+from *Huckleberry Finn*:
+
+> and see her setting there by her  
+> candle in the window with her  
+> eyes towards the road and  
+> the tears in them and  
+> I wished I could do something for her
+
 
 ## TODO
 
-handle words not found in cmudict at line-ends as well (read: implement last-syllable grapheme-to-phoneme translation, in Arpabet format to match the cmudict results)
+implement better last-syllable grapheme-to-phoneme translation
 take meter into account  
 make it more generally usable  
 maybe make it worth with different limerick formats qua different strategies one can choose
@@ -81,5 +109,7 @@ import nltk
 nltk.download()  
 d  
 cmudict  
+
+To add the CMU-based suffix dictionary, just stick 'cmusuffdict' into a new directory 'cmusuffdict' in your nltk_data/corpora/ directory.
   
 Once you have all that... well, I'll tell you what to do once there's something to do. For the moment, it's just set to search through Swann's Way, which contains at least the two delightful accidental limericks quoted above. This is in-progress for now, sorry!

@@ -3,11 +3,29 @@ import re
 from curses.ascii import isdigit
 from nltk.corpus import cmudict
 d = cmudict.dict()
+from nltk.corpus.util import LazyCorpusLoader
+from nltk.corpus.reader import *
+suffdict = LazyCorpusLoader(
+    'cmusuffdict', CMUDictCorpusReader, ['cmusuffdict'])
+suffdict = suffdict.dict()
 
 
 def phonemes(word):
     if not word.lower() in d:
-        return False
+        if re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*e?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
+            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*e?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
+            if last_syl in suffdict:
+                return suffdict[last_syl][0]
+            elif last_syl[1 - len(last_syl):] in suffdict:
+                return suffdict[last_syl[1 - len(last_syl):]][0]
+            elif last_syl[-2:] == "'s" and last_syl[:-2] in suffdict:
+                return suffdict[last_syl[:-2]][0]
+            elif last_syl[-1] == "s" and last_syl[:-1] in suffdict:
+                return suffdict[last_syl[:-1]][0]
+            else:
+                return False
+        else:
+            return False
     return min(d[word.lower()], key=len)
 
 
@@ -42,8 +60,8 @@ def nsyl(word):
 
 
 # TODO: handle words not found in cmudict
-# TODO: ignore digit char of vowel string, because stress is irrelevant to rhyming
-def rhyme_from_phonemes(list1, list2):  # Oh god refactor
+# TODO: ignore digit of the vowel string, because stress is irrelevant to rhyming
+def rhyme_from_phonemes(list1, list2):
     i = -1
     while i >= 0 - len(list1):
         if isdigit(list1[i][-1]):
@@ -62,7 +80,7 @@ def rhyme(word1, word2):
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read()
-        data = re.sub("[^a-zA-Z\s-]", '', data)
+        data = re.sub("[^a-zA-Z\s'-]", '', data)
         data = re.sub("'(?![a-z]{1,2})", '', data)
         array = re.split("\s+|-", data)
     if array[0] == '': del array[0]

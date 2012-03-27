@@ -46,7 +46,7 @@ while i < len(tokens):
             word_arrays[i].append("\n")
             if not phonemes:
                 break
-            if not poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
+            if not 'A' in rhyme_scheme or not poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
                 break
         elif syllable_counters[i] == 21:
             if phonemes == rhyme_scheme['A'] or not phonemes:
@@ -57,7 +57,7 @@ while i < len(tokens):
             word_arrays[i].append("\n")
             if not phonemes:
                 break
-            if not poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes):
+            if not 'B' in rhyme_scheme or not poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes):
                 break
         elif syllable_counters[i] == 35:
             if not phonemes:
