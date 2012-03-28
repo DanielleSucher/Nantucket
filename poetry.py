@@ -19,9 +19,9 @@ def phonemes(word):
             elif last_syl[1 - len(last_syl):] in suffdict:
                 return suffdict[last_syl[1 - len(last_syl):]][0]
             elif last_syl[-2:] == "'s" and last_syl[:-2] in suffdict:
-                return suffdict[last_syl[:-2]][0]
+                return suffdict[last_syl[:-2]][0].append('Z')
             elif last_syl[-1] == "s" and last_syl[:-1] in suffdict:
-                return suffdict[last_syl[:-1]][0]
+                return suffdict[last_syl[:-1]][0].append('Z')
             else:
                 return False
         else:
