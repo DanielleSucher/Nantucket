@@ -1,7 +1,12 @@
 import poetry
+import argparse
 
+parser = argparse.ArgumentParser(description='Find accidental limericks in any text.')
+parser.add_argument('--text',
+                   help='the file you want to search for limericks in, ie "ulysses.txt"')
+args = parser.parse_args()
 
-tokens = poetry.tokenize("proust-swann.txt")
+tokens = poetry.tokenize(args.text)
 
 
 def not_limerick(syllable_counter, current_sylct):  # return true if the word would overflow the line

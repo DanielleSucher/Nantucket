@@ -112,4 +112,4 @@ cmudict
 
 To add the CMU-based suffix dictionary, just stick 'cmusuffdict' into a new directory 'cmusuffdict' in your nltk_data/corpora/ directory.
   
-Once you have all that... well, I'll tell you what to do once there's something to do. For the moment, it's just set to search through Swann's Way, which contains at least the two delightful accidental limericks quoted above. This is in-progress for now, sorry!
+Once you have all that, you can search for accidental limericks in any text on the command line with: python nantucket.py --text *filename* (ie ulysses.txt)
