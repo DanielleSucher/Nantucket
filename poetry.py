@@ -61,7 +61,6 @@ def nsyl(word):
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
 
 
-# TODO: ignore digit of the vowel string, because stress is irrelevant to rhyming
 def rhyme_from_phonemes(list1, list2):
     i = -1
     while i >= 0 - len(list1):
@@ -88,7 +87,7 @@ def tokenize(file_path):
         tokens.remove('')
     return tokens
 
-# Thinking about inflection:
+# Thinking about meter:
 # In "there once" [was a man from Nantucket], I'd want to see that "there" is unstressed, and "once" is stressed
 # But cmudict sees the single vowel in each of them as 1 (primary stress), because it looks at each word in isolation
 # Maybe for now just assume than monosyllabic words are flexible, and use cmudict for stress on polysyllabic words?
