@@ -9,7 +9,7 @@ args = parser.parse_args()
 tokens = poetry.tokenize(args.text)
 
 
-def not_limerick(syllable_counter, current_sylct):  # return true if the word would overflow the line
+def overflows_line(syllable_counter, current_sylct):  # return true if the word would overflow the line
     if syllable_counter < 8 and current_sylct > 8 - syllable_counter:
         return True
     elif syllable_counter < 16 and current_sylct > 16 - syllable_counter:
@@ -37,7 +37,7 @@ while i < len(tokens):
     # if not syllable_counters[i]: print start_word  #    looks for not-in-cmudict words for me to study from
     while n < len(tokens):
         sylct = poetry.nsyl(tokens[n])
-        if not_limerick(syllable_counters[i], sylct):
+        if overflows_line(syllable_counters[i], sylct):
             break  # break out if a word overflows the line
         word_arrays[i].append(tokens[n])
         syllable_counters[i] += sylct

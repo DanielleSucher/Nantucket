@@ -78,13 +78,33 @@ From *Genesis*:
 > his hand and upon  
 > the hand of his wife and upon the
 
-from *Huckleberry Finn*:
+from *Huckleberry Finn* by Mark Twain:
 
 > and see her setting there by her  
 > candle in the window with her  
 > eyes towards the road and  
 > the tears in them and  
 > I wished I could do something for her
+
+from *The Brothers Karamazov* by Fyodor Dostoevsky:
+
+> eyes with a needle I love you  
+> I love only you Ill love you  
+> in Siberia  
+> Why Siberia  
+> Never mind Siberia if you  
+  
+> are children of twelve years old who  
+> have a longing to set fire to  
+> something and they do  
+> set things on fire too  
+> Its a sort of disease Thats not true  
+  
+> and be horror struck How can I  
+> endure this mercy How can I  
+> endure so much love  
+> Am I worthy of  
+> it Thats what he will exclaim Oh I
 
 
 ## TODO

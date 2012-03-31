@@ -12,6 +12,7 @@ suffdict = suffdict.dict()
 
 def phonemes(word):
     if not word.lower() in d:
+        # Use my cmu-based last syllable dictionary
         if re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*e?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
             last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*e?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
             if last_syl in suffdict:
@@ -22,10 +23,11 @@ def phonemes(word):
                 return suffdict[last_syl[:-2]][0].append('Z')
             elif last_syl[-1] == "s" and last_syl[:-1] in suffdict:
                 return suffdict[last_syl[:-1]][0].append('Z')
-            else:
+            else:  # If not in cmudict or my cmusuffdict
                 return False
         else:
             return False
+    # If in cmudict, just use cmudict
     return min(d[word.lower()], key=len)
 
 
@@ -59,7 +61,6 @@ def nsyl(word):
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
 
 
-# TODO: handle words not found in cmudict
 # TODO: ignore digit of the vowel string, because stress is irrelevant to rhyming
 def rhyme_from_phonemes(list1, list2):
     i = -1
@@ -79,13 +80,13 @@ def rhyme(word1, word2):
 
 def tokenize(file_path):
     with open(file_path) as f:
-        data = f.read()
+        data = f.read().strip()
         data = re.sub("[^a-zA-Z\s'-]", '', data)
         data = re.sub("'(?![a-z]{1,2})", '', data)
-        array = re.split("\s+|-", data)
-    if array[0] == '': del array[0]
-    if array[-1] == '': del array[-1]
-    return array
+        tokens = re.split("\s+|-", data)
+    while '' in tokens:
+        tokens.remove('')
+    return tokens
 
 # Thinking about inflection:
 # In "there once" [was a man from Nantucket], I'd want to see that "there" is unstressed, and "once" is stressed
