@@ -109,9 +109,8 @@ from *The Brothers Karamazov* by Fyodor Dostoevsky:
 
 ## TODO
 
-implement better last-syllable grapheme-to-phoneme translation
+implement last-syllable grapheme-to-phoneme conversion based on machine learning rather than my homegrown cmusuffdict
 take meter into account  
-make it more generally usable  
 maybe make it worth with different limerick formats qua different strategies one can choose
 make the search algorithm faster/more efficient (perhaps by not starting from scratch for each go-round)
 
