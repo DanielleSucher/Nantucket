@@ -20,25 +20,23 @@ entries = cmudict.entries()
 # maybe also keep track of total syllable count per phoneme, to affect the odds
 
 
-test = {'toughed': [['T', 'AH1', 'F', 'T']], "they'll": [['DH', 'EY1', 'L']], 'concatenate': [['K', 'AH0', 'N', 'K', 'AE1', 'T', 'AH0', 'N', 'EY2', 'T']], 'bump': [['B', 'AH1', 'M', 'P']], 'waters': [['W', 'AO1', 'T', 'ER0', 'Z']], 'frigid': [['F', 'R', 'IH1', 'JH', 'AH0', 'D']], 'ABORTIONISTS': [['AH0', 'B', 'AO1', 'R', 'SH', 'AH0', 'N', 'IH0', 'S', 'T', 'S'], ['AH0', 'B', 'AO1', 'R', 'SH', 'AH0', 'N', 'IH0', 'S']]}
-
-
 def suff(dict):
     f = open('suff_a.txt', 'a')
     for word, vals in dict.iteritems():
-        if re.search("((?i)[BCDFGHJKLMNPQRSTVWXZ][AEIOUY]+[BCDFGHJKLMNPQRSTVWXZ]*E?('[A-Z]{1,2})?)(?![a-zA-Z]+)", word):
-            graphemes = re.search("((?i)[BCDFGHJKLMNPQRSTVWXZ][AEIOUY]+[BCDFGHJKLMNPQRSTVWXZ]*E?('[A-Z]{1,2})?)(?![a-zA-Z]+)", word).group()
+        if re.search("((?i)[BCDFGHJKLMNPQRSTVWXZ]{1,2}[AEIOUY]+[BCDFGHJKLMNPQRSTVWXZ]*(E|ED)?('[A-Z]{1,2})?)(?![a-zA-Z]+)", word):
+            graphemes = re.search("((?i)[BCDFGHJKLMNPQRSTVWXZ]{1,2}[AEIOUY]+[BCDFGHJKLMNPQRSTVWXZ]*(E|ED)?('[A-Z]{1,2})?)(?![a-zA-Z]+)", word).group()
         else:
             pass
-        for val in vals:
-            i = -1
-            while i >= 0 - len(val):
-                if isdigit(val[i][-1]):
-                    str = " ".join(val[i:])
-                    f.write(graphemes + ' ' + str + '\n')
-                    f.write(graphemes[1 - len(graphemes):] + ' ' + str + '\n')
-                    break
-                i -= 1
+        val = min(vals, key=len)
+        # for val in vals:
+        i = -1
+        while i >= 0 - len(val):
+            if isdigit(val[i][-1]):
+                str = " ".join(val[i:])
+                f.write(graphemes + ' ' + str + '\n')
+                f.write(graphemes[1 - len(graphemes):] + ' ' + str + '\n')
+                break
+            i -= 1
     f.close()
 
 

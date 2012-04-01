@@ -26,13 +26,14 @@ Going by the canonical example above, Nantucket is set to look for limericks wit
 > B (5)   
 > A (9)  
   
-And eventually will look for the following meter as well:
+And eventually will perhaps look for the following meter as well:
   
 > duh DUM duh duh DUM duh duh DUM  
 > duh DUM duh duh DUM duh duh DUM  
 > duh DUM duh duh DUM   
 > duh DUM duh duh DUM  
 > duh duh DUM duh duh DUM duh duh DUM
+
 
 ## Example results
 
@@ -49,6 +50,13 @@ From *Swann's Way* by Proust:
 > unfortunate to  
 > a third Yes if you  
 > like I must just keep in the line for
+
+> to abandon the habit of  
+> lying Even from the point of  
+> view of coquetry  
+> pure and simple he  
+> had told her can't you see how much of
+
 
 from *Ulysses* by James Joyce:
 
@@ -78,7 +86,19 @@ From *Genesis*:
 > his hand and upon  
 > the hand of his wife and upon the
 
+> Amorite and the Girgasite  
+> And the Hivite and the Arkite  
+> and the Sinite And  
+> the Arvadite and  
+> the Zemarite and the Hamathite
+
 from *Huckleberry Finn* by Mark Twain:
+
+> he suspicion what we're up to  
+> Maybe he won't But we got to  
+> have it anyway  
+> Come along So they  
+> got out and went in The door slammed to
 
 > and see her setting there by her  
 > candle in the window with her  
@@ -107,9 +127,8 @@ from *The Brothers Karamazov* by Fyodor Dostoevsky:
 > it Thats what he will exclaim Oh I
 
 
-## TODO
+## TODO (maybe)
 
-implement last-syllable grapheme-to-phoneme conversion based on machine learning rather than my homegrown cmusuffdict
 take meter into account  
 maybe make it worth with different limerick formats qua different strategies one can choose
 make the search algorithm faster/more efficient (perhaps by not starting from scratch for each go-round)
@@ -129,6 +148,8 @@ nltk.download()
 d  
 cmudict  
 
-To add the CMU-based suffix dictionary, just stick 'cmusuffdict' into a new directory 'cmusuffdict' in your nltk_data/corpora/ directory.
+To add my CMU-based suffix dictionary, just stick 'cmusuffdict' into a new directory 'cmusuffdict' in your nltk_data/corpora/ directory.
+
+If you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests.
   
 Once you have all that, you can search for accidental limericks in any text on the command line with: python nantucket.py --text *filename* (ie ulysses.txt)

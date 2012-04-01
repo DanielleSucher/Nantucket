@@ -13,8 +13,8 @@ suffdict = suffdict.dict()
 def phonemes(word):
     if not word.lower() in d:
         # Use my cmu-based last syllable dictionary
-        if re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*e?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
-            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*e?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
+        if re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
+            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
             if last_syl in suffdict:
                 return suffdict[last_syl][0]
             elif last_syl[1 - len(last_syl):] in suffdict:
@@ -61,14 +61,16 @@ def nsyl(word):
     # This grabs each item where the last character is a digit (how cmudict represents vowel sounds), and counts them
 
 
+# Ignores stress for now, while I'm not taking meter into account
 def rhyme_from_phonemes(list1, list2):
     i = -1
     while i >= 0 - len(list1):
         if isdigit(list1[i][-1]):
-            if list1[i:] == list2[i:]:
+            if i >= 0 - len(list2) and list1[i][:-1] == list2[i][:-1] and (i == -1 or list1[i + 1:] == list2[i + 1:]):
                 return True
+            else:
+                return False
         i -= 1
-    return False
 
 
 def rhyme(word1, word2):
