@@ -24,22 +24,28 @@ def overflows_line(syllable_counter, current_sylct):  # return true if the word 
 
 
 limericks = []
-potential_limerick = {}
+word_data = {}
 i = 0
 while i < len(tokens):
     start_word = tokens[i]
+    if not start_word in word_data:
+        word_data[start_word] = {"sylct": poetry.nsyl(start_word), "phonemes": poetry.phonemes(start_word)}
+        # Uses more space in exchange for getting more speed
     word_array = [start_word]  # Holds the actual words of the potential limerick
-    syllable_counter = poetry.nsyl(start_word)
+    syllable_counter = word_data[start_word]['sylct']
     n = i + 1
     rhyme_scheme = {}  # Tracks the rhyme scheme
     # if not syllable_counters[i]: print start_word  #    looks for not-in-cmudict words for me to study from
     while n < len(tokens):
-        sylct = poetry.nsyl(tokens[n])
+        next_word = tokens[n]
+        if not next_word in word_data:
+            word_data[next_word] = {"sylct": poetry.nsyl(next_word), "phonemes": poetry.phonemes(next_word)}
+        sylct = word_data[next_word]['sylct']
         if overflows_line(syllable_counter, sylct):
             break  # break out if a word overflows the line
-        word_array.append(tokens[n])
+        word_array.append(next_word)
         syllable_counter += sylct
-        phonemes = poetry.phonemes(tokens[n])
+        phonemes = word_data[next_word]['phonemes']
         if syllable_counter == 8:
             if not phonemes:
                 break
