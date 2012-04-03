@@ -37,7 +37,7 @@ And eventually will perhaps look for the following meter as well:
 
 ## Example results
 
-From *Swann's Way* by Proust:
+from *Swann's Way* by Proust:
 
 > bad conduct should deserve Was I  
 > then not yet aware that what I  
@@ -75,10 +75,10 @@ from *Ulysses* by James Joyce:
 > meant till he put his tongue in my  
 > mouth his mouth was sweetlike young I  
 > put my knee up to  
-> him a few times to
+> him a few times to  
 > learn the way what did I tell him I
 
-From *Genesis*:
+from *Genesis*:
  
 > in the iniquity of the  
 > city And while he lingered the  
@@ -150,6 +150,6 @@ cmudict
 
 To add my CMU-based suffix dictionary, just stick 'cmusuffdict' into a new directory 'cmusuffdict' in your nltk_data/corpora/ directory.
 
-If you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests.
+If you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests. Or you can read my ridiculously long blog post about the making of Nantucket - http://www.daniellesucher.com/2012/04/nantucket-an-accidental-limerick-detector/
   
-Once you have all that, you can search for accidental limericks in any text on the command line with: python nantucket.py --text *filename* (ie ulysses.txt)
+Once you have all that, you can search for accidental limericks in any text (from a directory containing both Nantucket's files and the text) on the command line with: python nantucket.py --text *filename* (ie: *python nantucket.py --text ulysses.txt*).
