@@ -1,4 +1,8 @@
 from __future__ import division
+import sys
+import os.path
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
 import poetry
 import re
 from nltk.corpus import cmudict
@@ -30,6 +34,8 @@ def suffdict_phonemes(word):
                 return suffdict[last_syl[1 - len(last_syl):-2]][0].append('Z')
             elif last_syl[2 - len(last_syl):-2] in suffdict:
                 return suffdict[last_syl[2 - len(last_syl):-2]][0].append('Z')
+            else:
+                return False
         # else try without the last letter, if it ends in s
         elif last_syl[-1] == "s":
             if last_syl[:-1] in suffdict:
@@ -38,6 +44,8 @@ def suffdict_phonemes(word):
                 return suffdict[last_syl[1 - len(last_syl):-1]][0].append('Z')
             elif last_syl[2 - len(last_syl):-1] in suffdict:
                 return suffdict[last_syl[2 - len(last_syl):-1]][0].append('Z')
+            else:
+                return False
         else:  # If not in cmudict or my cmusuffdict
             return False
     else:

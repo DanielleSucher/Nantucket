@@ -13,16 +13,36 @@ suffdict = suffdict.dict()
 def phonemes(word):
     if not word.lower() in d:
         # Use my cmu-based last syllable dictionary
-        if re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
-            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz][aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
+        if re.search("((?i)[bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
+            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
             if last_syl in suffdict:
                 return suffdict[last_syl][0]
+            # else try without the first letter
             elif last_syl[1 - len(last_syl):] in suffdict:
                 return suffdict[last_syl[1 - len(last_syl):]][0]
-            elif last_syl[-2:] == "'s" and last_syl[:-2] in suffdict:
-                return suffdict[last_syl[:-2]][0].append('Z')
-            elif last_syl[-1] == "s" and last_syl[:-1] in suffdict:
-                return suffdict[last_syl[:-1]][0].append('Z')
+            # else try without the first 2 letters
+            elif last_syl[2 - len(last_syl):] in suffdict:
+                return suffdict[last_syl[2 - len(last_syl):]][0]
+            # else try without the last 2 letters, if it ends in 's
+            elif last_syl[-2:] == "'s":
+                if last_syl[:-2] in suffdict:
+                    return suffdict[last_syl[:-2]][0].append('Z')
+                elif last_syl[1 - len(last_syl):-2] in suffdict:
+                    return suffdict[last_syl[1 - len(last_syl):-2]][0].append('Z')
+                elif last_syl[2 - len(last_syl):-2] in suffdict:
+                    return suffdict[last_syl[2 - len(last_syl):-2]][0].append('Z')
+                else:
+                    return False
+            # else try without the last letter, if it ends in s
+            elif last_syl[-1] == "s":
+                if last_syl[:-1] in suffdict:
+                    return suffdict[last_syl[:-1]][0].append('Z')
+                elif last_syl[1 - len(last_syl):-1] in suffdict:
+                    return suffdict[last_syl[1 - len(last_syl):-1]][0].append('Z')
+                elif last_syl[2 - len(last_syl):-1] in suffdict:
+                    return suffdict[last_syl[2 - len(last_syl):-1]][0].append('Z')
+                else:
+                    return False
             else:  # If not in cmudict or my cmusuffdict
                 return False
         else:
