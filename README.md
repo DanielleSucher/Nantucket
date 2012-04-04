@@ -164,4 +164,15 @@ To add my CMU-based suffix dictionary, just stick 'cmusuffdict' into a new direc
 
 IF you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests. Or you can read my ridiculously long blog post about the making of Nantucket - http://www.daniellesucher.com/2012/04/nantucket-an-accidental-limerick-detector/
   
-Once you have all that, you can search for accidental limericks in any text (from a directory containing both Nantucket's files and the text) on the command line with: python nantucket.py --text *filename* (ie: *python nantucket.py --text ulysses.txt*).
+Once you have all that, you can search for accidental limericks in any text (from a directory containing both Nantucket's files and the text) on the command line with:
+
+    $ python nantucket.py --text <filename>
+
+ie:
+
+    $ python nantucket.py --text ulysses.txt
+
+Or, if you don't yet have the text of Ulysses lying around:
+
+    $ wget http://www.gutenberg.org/cache/epub/4300/pg4300.txt -O ulysses.txt
+    $ python nantucket.py --text <filename>
