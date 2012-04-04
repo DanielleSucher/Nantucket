@@ -2,7 +2,7 @@
 
 Limericks have a fairly loose form. The rhyme scheme and syllable count is typically something like this:
 
-> A (7, 8 or 9 syllables*)  
+> A (7, 8 or 9 syllables)  
 > A (7, 8 or 9)  
 > B (5 or 6)  
 > B (5 or 6)  
@@ -138,18 +138,30 @@ make the search algorithm faster/more efficient (perhaps by not starting from sc
 
 Written with Python 2.7.2, using the awesome nltk library and the CMU pronunciation dictionary. 
 
-pip install numpy  
-pip install nltk  
+    pip install numpy  
+    pip install nltk  
   
 To get the CMU dictionary (which is critical):  
-python  
-import nltk  
-nltk.download()  
-d  
-cmudict  
+
+    $ python  
+    >>> import nltk  
+    >>> nltk.download()  
+    NLTK Downloader
+    ---------------------------------------------------------------------------
+        d) Download   l) List    u) Update   c) Config   h) Help   q) Quit
+    ---------------------------------------------------------------------------
+    Downloader> d
+
+    Download which package (l=list; x=cancel)?
+      Identifier> cmudict
+        Downloading package 'cmudict' to ~/nltk_data...
+          Unzipping corpora/cmudict.zip.
 
 To add my CMU-based suffix dictionary, just stick 'cmusuffdict' into a new directory 'cmusuffdict' in your nltk_data/corpora/ directory.
 
-If you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests. Or you can read my ridiculously long blog post about the making of Nantucket - http://www.daniellesucher.com/2012/04/nantucket-an-accidental-limerick-detector/
+    $ mkdir ~/nltk_data/corpora/cmusuffdict
+    $ mv suffdict_creation/cmusuffdict ~/nltk_data/corpora/cmusuffdict/
+
+IF you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests. Or you can read my ridiculously long blog post about the making of Nantucket - http://www.daniellesucher.com/2012/04/nantucket-an-accidental-limerick-detector/
   
 Once you have all that, you can search for accidental limericks in any text (from a directory containing both Nantucket's files and the text) on the command line with: python nantucket.py --text *filename* (ie: *python nantucket.py --text ulysses.txt*).
