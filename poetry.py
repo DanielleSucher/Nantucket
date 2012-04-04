@@ -52,10 +52,9 @@ def phonemes(word):
 
 
 def approx_nsyl(word):
-    digraphs = ["ai", "au", "ay", "ea", "ee", "ei", "ey", "oa", "oe", "oi", "oo", "ou", "oy", "ua", "ue", "ui"]
+    digraphs = {"ai", "au", "ay", "ea", "ee", "ei", "ey", "oa", "oe", "oi", "oo", "ou", "oy", "ua", "ue", "ui"}
     # Ambiguous, currently split: ie, io
     # Ambiguous, currently kept together: ui
-    digraphs = set(digraphs)
     count = 0
     array = re.split("[^aeiouy]+", word.lower())
     for i, v in enumerate(array):
