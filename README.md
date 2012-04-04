@@ -175,4 +175,4 @@ ie:
 Or, if you don't yet have the text of Ulysses lying around:
 
     $ wget http://www.gutenberg.org/cache/epub/4300/pg4300.txt -O ulysses.txt
-    $ python nantucket.py --text <filename>
+    $ python nantucket.py --text ulysses.txt
