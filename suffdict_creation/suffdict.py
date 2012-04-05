@@ -25,8 +25,6 @@ def suff(dict):
     for word, vals in dict.iteritems():
         if re.search("((?i)[BCDFGHJKLMNPQRSTVWXZ]{1,2}[AEIOUY]+[BCDFGHJKLMNPQRSTVWXZ]*(E|ED)?('[A-Z]{1,2})?)(?![a-zA-Z]+)", word):
             graphemes = re.search("((?i)[BCDFGHJKLMNPQRSTVWXZ]{1,2}[AEIOUY]+[BCDFGHJKLMNPQRSTVWXZ]*(E|ED)?('[A-Z]{1,2})?)(?![a-zA-Z]+)", word).group()
-        else:
-            pass
         val = min(vals, key=len)
         # for val in vals:
         i = -1
@@ -51,8 +49,6 @@ def most_prob(file):
                 new_line = re.sub("\d+\s(?=[a-z])", "", line)
                 new_line = re.sub("(?<=[a-z])\s(?=[A-Z])", " 1 ", new_line).strip()
                 goal.write(new_line + '\n')
-            else:
-                pass
     goal.close()
 
 
