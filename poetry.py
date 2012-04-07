@@ -1,5 +1,6 @@
 from __future__ import division
 import re
+import urllib2
 from curses.ascii import isdigit
 from nltk.corpus import cmudict
 d = cmudict.dict()
@@ -104,6 +105,16 @@ def tokenize(file_path):
         data = re.sub("[^a-zA-Z\s'-]", '', data)
         data = re.sub("'(?![a-z]{1,2})", '', data)
         tokens = re.split("\s+|-", data)
+    while '' in tokens:
+        tokens.remove('')
+    return tokens
+
+
+def tokenize_from_url(url):
+    data = urllib2.urlopen(url).read().strip()
+    data = re.sub("[^a-zA-Z\s'-]", '', data)
+    data = re.sub("'(?![a-z]{1,2})", '', data)
+    tokens = re.split("\s+|-", data)
     while '' in tokens:
         tokens.remove('')
     return tokens

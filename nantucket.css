@@ -1,0 +1,16 @@
+#form {
+	width: 550px;
+	margin: auto;	
+}
+
+#banner,
+#info {
+	text-align: center;
+	margin: auto;	
+}
+
+#inner_form {
+	float: right;
+	text-align: right;
+	padding-right: 30px;
+}

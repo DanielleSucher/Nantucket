@@ -1,15 +1,17 @@
+#!/Library/Frameworks/Python.framework/Versions/2.7/bin/python
+
 import poetry
-import argparse
+import cgi
 
-parser = argparse.ArgumentParser(description='Find accidental limericks in any text.')
-parser.add_argument('--text',
-                   help='the file you want to search for limericks in, ie "ulysses.txt"')
-args = parser.parse_args()
-
-tokens = poetry.tokenize(args.text)
+form = cgi.FieldStorage()
+url = form['url'].value
 
 
-def overflows_line(syllable_counter, current_sylct):  # return true if the word would overflow the line
+tokens = poetry.tokenize_from_url(url)
+
+
+def overflows_line(syllable_counter, current_sylct):
+    # return true if the word would overflow the line
     if syllable_counter < 8 and current_sylct > 8 - syllable_counter:
         return True
     elif syllable_counter < 16 and current_sylct > 16 - syllable_counter:
@@ -52,9 +54,9 @@ while i < len(tokens):
             if not phonemes:
                 break
             rhyme_scheme['A'] = phonemes
-            word_array.append("\n")
+            word_array.append("<br>")
         elif syllable_counter == 16:
-            word_array.append("\n")
+            word_array.append("<br>")
             if not phonemes:
                 break
             if (not 'A' in rhyme_scheme or not \
@@ -64,9 +66,9 @@ while i < len(tokens):
             if phonemes == rhyme_scheme['A'] or not phonemes:
                 break
             rhyme_scheme['B'] = phonemes
-            word_array.append("\n")
+            word_array.append("<br>")
         elif syllable_counter == 26:
-            word_array.append("\n")
+            word_array.append("<br>")
             if not phonemes:
                 break
             if (not 'B' in rhyme_scheme or not \
@@ -81,9 +83,12 @@ while i < len(tokens):
         n += 1
     i += 1
 
+print "Content-type: text/html\n\n"
 if limericks == []:
-    print "Sorry, there were no limericks found in your text!"
+    print "Sorry, there were no limericks found in your text!<br><br>"
 else:
     for limerick in limericks:
         limerick = " ".join(limerick)
         print limerick
+        print "<br><br>"
+print "<a href='/nantucket/nantucket.html'>Return to Nantucket to find more limericks!</a>"
