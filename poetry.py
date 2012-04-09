@@ -115,8 +115,6 @@ def tokenize_from_url(url):
     data = re.sub("[^a-zA-Z\s'-]", '', data)
     data = re.sub("'(?![a-z]{1,2})", '', data)
     tokens = re.split("\s+|-", data)
-    while '' in tokens:
-        tokens.remove('')
     return tokens
 
 # Thinking about meter:

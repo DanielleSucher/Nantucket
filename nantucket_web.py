@@ -29,6 +29,9 @@ limericks = []
 word_data = {}
 i = 0
 while i < len(tokens):
+    if tokens[i] == '':
+        tokens.remove('')
+        continue
     start_word = tokens[i]
     if not start_word in word_data:
         word_data[start_word] = {"sylct": poetry.nsyl(start_word),
@@ -40,6 +43,9 @@ while i < len(tokens):
     n = i + 1
     rhyme_scheme = {}  # Tracks the rhyme scheme
     while n < len(tokens):
+        if tokens[n] == '':
+            tokens.remove('')
+            continue
         next_word = tokens[n]
         if not next_word in word_data:
             word_data[next_word] = {"sylct": poetry.nsyl(next_word),
