@@ -177,4 +177,4 @@ Or, if you don't yet have the text of Ulysses lying around:
 
 If you're curious about how I handled rhyming words not in the CMU dictionary, check out suffdict.py and test_suffdict.py. I get approximately 90.85% accuracy, according to my tests. Or you can read my ridiculously long blog post about the making of Nantucket - http://www.daniellesucher.com/2012/04/nantucket-an-accidental-limerick-detector/
 
-Also, I finally webbified it with turning nantucket_web.py into a cgi script (imported cgi, added the shebang, chmod a+x, and added a function in poetry.py to handle URLs rather than files), so you can just play with Nantucket by pointing it at links to text files on the web here: http://www.daniellesucher.com/nantucket/nantucket.html
+Also, I finally webbified Nantucket so it can also be used as a cgi script (imported cgi, added the shebang, chmod a+x, and refactored it to allow for the option of handling urls rather than just files and using html formatting when needed), so you can just play with Nantucket by pointing it at links to text files on the web here: http://www.daniellesucher.com/nantucket/nantucket.html

@@ -10,6 +10,7 @@ suffdict = LazyCorpusLoader(
     'cmusuffdict', CMUDictCorpusReader, ['cmusuffdict'])
 suffdict = suffdict.dict()
 
+
 def try_syllable(syl):
     ''' helper function for phonemes()
     Tests if syl is in suffdict. If not, removes the first letter
@@ -26,6 +27,7 @@ def try_syllable(syl):
     # else return None, which the calling function should check for
     else:
         return None
+
 
 def phonemes(word):
     word = word.lower()
@@ -119,10 +121,12 @@ def tokenize_text(text):
     tokens = filter(None, tokens)
     return tokens
 
+
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read().strip()
     return tokenize_text(data)
+
 
 def tokenize_from_url(url):
     data = urllib2.urlopen(url).read().strip()
