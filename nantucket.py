@@ -25,6 +25,9 @@ def overflows_line(syllable_counter, current_sylct):
 
     return False
 
+def new_word_data(word):
+    ''' return a dict with the syllable count and phonemes in the word '''
+    return {"sylct": poetry.nsyl(word), "phonemes": poetry.phonemes(word)}
 
 limericks = []
 word_data = {}
@@ -35,8 +38,7 @@ while i < len(tokens):
         continue
     start_word = tokens[i]
     if not start_word in word_data:
-        word_data[start_word] = {"sylct": poetry.nsyl(start_word),
-        "phonemes": poetry.phonemes(start_word)}
+        word_data[start_word] = new_word_data(start_word)
         # Uses more space in exchange for getting more speed
     word_array = [start_word]
         # Holds the actual words of the potential limerick
@@ -49,8 +51,7 @@ while i < len(tokens):
             continue
         next_word = tokens[n]
         if not next_word in word_data:
-            word_data[next_word] = {"sylct": poetry.nsyl(next_word),
-            "phonemes": poetry.phonemes(next_word)}
+            word_data[next_word] = new_word_data(next_word)
         sylct = word_data[next_word]['sylct']
         if overflows_line(syllable_counter, sylct):
             break  # break out if a word overflows the line
