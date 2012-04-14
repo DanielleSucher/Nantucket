@@ -8,80 +8,92 @@ args = parser.parse_args()
 
 tokens = poetry.tokenize(args.text)
 
+def overflows_line(syllable_counter, current_sylct):
+    ''' return true if the word would overflow the line '''
 
-def overflows_line(syllable_counter, current_sylct):  # return true if the word would overflow the line
-    if syllable_counter < 8 and current_sylct > 8 - syllable_counter:
+    # see what the new syllable count would be if we added this word
+    new_sylct = syllable_counter + current_sylct
+
+    # iterate through the syllable counts marking the end of each of the five
+    # lines in a standard limerick. for each line, check if the old syllable
+    # count has not exceeded that line and the new one has
+    line_endings = [8, 16, 21, 26, 35]
+    for count in line_endings:
+      if syllable_counter < count and new_sylct > count:
         return True
-    elif syllable_counter < 16 and current_sylct > 16 - syllable_counter:
-        return True
-    elif syllable_counter < 21 and current_sylct > 21 - syllable_counter:
-        return True
-    elif syllable_counter < 26 and current_sylct > 26 - syllable_counter:
-        return True
-    elif syllable_counter < 35 and current_sylct > 35 - syllable_counter:
-        return True
+
     return False
 
+def new_word_data(word):
+    ''' return a dict with the syllable count and phonemes in the word '''
+    return {"sylct": poetry.nsyl(word), "phonemes": poetry.phonemes(word)}
+
+def check_rhyme(rhyme_scheme, line, phonemes):
+    ''' rhyme_scheme: a dict of end rhymes for the current limerick, of the form
+                        {'A': phoneme, 'B': phoneme}
+        line:         position of line whose ending we are checking ('A' or 'B')
+        phonemes:     the phoneme ending the current line, to check against rhyme_scheme
+    '''
+    if not line in rhyme_scheme:
+        return False
+
+    return poetry.rhyme_from_phonemes(rhyme_scheme[line], phonemes)
 
 limericks = []
+
+# Store the syllable count and phonemes for words we encounter
+# Uses more space in exchange for getting more speed
 word_data = {}
+
 i = 0
 while i < len(tokens):
-    if tokens[i] == '':
-        tokens.remove('')
-        continue
     start_word = tokens[i]
     if not start_word in word_data:
-        word_data[start_word] = {"sylct": poetry.nsyl(start_word),
-        "phonemes": poetry.phonemes(start_word)}
-        # Uses more space in exchange for getting more speed
+        word_data[start_word] = new_word_data(start_word)
+
+    # Holds the actual words of the potential limerick
     word_array = [start_word]
-        # Holds the actual words of the potential limerick
+
     syllable_counter = word_data[start_word]['sylct']
     n = i + 1
     rhyme_scheme = {}  # Tracks the rhyme scheme
     while n < len(tokens):
-        if tokens[n] == '':
-            tokens.remove('')
-            continue
         next_word = tokens[n]
         if not next_word in word_data:
-            word_data[next_word] = {"sylct": poetry.nsyl(next_word),
-            "phonemes": poetry.phonemes(next_word)}
+            word_data[next_word] = new_word_data(next_word)
         sylct = word_data[next_word]['sylct']
+
+        # break out if a word overflows the line
         if overflows_line(syllable_counter, sylct):
-            break  # break out if a word overflows the line
+            break
+
         word_array.append(next_word)
         syllable_counter += sylct
         phonemes = word_data[next_word]['phonemes']
+
+        # abandon the current limerick-in-progress if we hit a word
+        # with no phoneme data
+        if not phonemes:
+            break
+
         if syllable_counter == 8:
-            if not phonemes:
-                break
             rhyme_scheme['A'] = phonemes
             word_array.append("\n")
         elif syllable_counter == 16:
             word_array.append("\n")
-            if not phonemes:
-                break
-            if (not 'A' in rhyme_scheme or not \
-                poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes)):
+            if not check_rhyme(rhyme_scheme, 'A', phonemes):
                 break
         elif syllable_counter == 21:
-            if phonemes == rhyme_scheme['A'] or not phonemes:
+            if phonemes == rhyme_scheme['A']:
                 break
             rhyme_scheme['B'] = phonemes
             word_array.append("\n")
         elif syllable_counter == 26:
             word_array.append("\n")
-            if not phonemes:
-                break
-            if (not 'B' in rhyme_scheme or not \
-                poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes)):
+            if not check_rhyme(rhyme_scheme, 'B', phonemes):
                 break
         elif syllable_counter == 35:
-            if not phonemes:
-                break
-            if poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
+            if check_rhyme(rhyme_scheme, 'A', phonemes):
                 limericks.append(word_array)
             break
         n += 1

@@ -10,46 +10,58 @@ suffdict = LazyCorpusLoader(
     'cmusuffdict', CMUDictCorpusReader, ['cmusuffdict'])
 suffdict = suffdict.dict()
 
+def try_syllable(syl):
+    ''' helper function for phonemes()
+    Tests if syl is in suffdict. If not, removes the first letter
+    and then the first two letters, checking each time
+    '''
+    if syl in suffdict:
+        return suffdict[syl][0]
+    # else try without the first letter
+    elif syl[1:] in suffdict:
+        return suffdict[syl[1:]][0]
+    # else try without the first 2 letters
+    elif syl[2:] in suffdict:
+        return suffdict[syl[2:]][0]
+    # else return None, which the calling function should check for
+    else:
+        return None
 
 def phonemes(word):
-    if not word.lower() in d:
-        # Use my cmu-based last syllable dictionary
-        if re.search("((?i)[bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
-            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
-            if last_syl in suffdict:
-                return suffdict[last_syl][0]
-            # else try without the first letter
-            elif last_syl[1 - len(last_syl):] in suffdict:
-                return suffdict[last_syl[1 - len(last_syl):]][0]
-            # else try without the first 2 letters
-            elif last_syl[2 - len(last_syl):] in suffdict:
-                return suffdict[last_syl[2 - len(last_syl):]][0]
-            # else try without the last 2 letters, if it ends in 's
-            elif last_syl[-2:] == "'s":
-                if last_syl[:-2] in suffdict:
-                    return suffdict[last_syl[:-2]][0].append('Z')
-                elif last_syl[1 - len(last_syl):-2] in suffdict:
-                    return suffdict[last_syl[1 - len(last_syl):-2]][0].append('Z')
-                elif last_syl[2 - len(last_syl):-2] in suffdict:
-                    return suffdict[last_syl[2 - len(last_syl):-2]][0].append('Z')
-                else:
-                    return False
-            # else try without the last letter, if it ends in s
-            elif last_syl[-1] == "s":
-                if last_syl[:-1] in suffdict:
-                    return suffdict[last_syl[:-1]][0].append('Z')
-                elif last_syl[1 - len(last_syl):-1] in suffdict:
-                    return suffdict[last_syl[1 - len(last_syl):-1]][0].append('Z')
-                elif last_syl[2 - len(last_syl):-1] in suffdict:
-                    return suffdict[last_syl[2 - len(last_syl):-1]][0].append('Z')
-                else:
-                    return False
-            else:  # If not in cmudict or my cmusuffdict
-                return False
+    word = word.lower()
+    # If in cmudict, just use cmudict
+    if word in d:
+        return min(d[word], key=len)
+
+    # If not, try to use my cmu-based last syllable dictionary
+
+    # if we cannot detect the last syllable, give up
+    syl_re = re.compile("([bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)")
+    if not syl_re.search(word):
+        return False
+
+    last_syl = syl_re.search(word).group()
+
+    # now try the last syllable against cmusuffdict
+    p = try_syllable(last_syl)
+    if p:
+        return p
+    # else try without the last 2 letters, if it ends in 's
+    elif last_syl[-2:] == "'s":
+        p = try_syllable(last_syl[:-2])
+        if p:
+            return p.append('Z')
         else:
             return False
-    # If in cmudict, just use cmudict
-    return min(d[word.lower()], key=len)
+    # else try without the last letter, if it ends in s
+    elif last_syl[-1] == "s":
+        p = try_syllable(last_syl[:-1])
+        if p:
+            return p.append('Z')
+        else:
+            return False
+    else:  # If not in cmudict or my cmusuffdict
+        return False
 
 
 def approx_nsyl(word):
@@ -99,23 +111,22 @@ def rhyme(word1, word2):
     return rhyme_from_phonemes(list1, list2)
 
 
+def tokenize_text(text):
+    text = re.sub("[^a-zA-Z\s'-]", '', text)
+    text = re.sub("'(?![a-z]{1,2})", '', text)
+    tokens = re.split("\s+|-", text)
+    # remove empty tokens
+    tokens = filter(None, tokens)
+    return tokens
+
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read().strip()
-        data = re.sub("[^a-zA-Z\s'-]", '', data)
-        data = re.sub("'(?![a-z]{1,2})", '', data)
-        tokens = re.split("\s+|-", data)
-    while '' in tokens:
-        tokens.remove('')
-    return tokens
-
+    return tokenize_text(data)
 
 def tokenize_from_url(url):
     data = urllib2.urlopen(url).read().strip()
-    data = re.sub("[^a-zA-Z\s'-]", '', data)
-    data = re.sub("'(?![a-z]{1,2})", '', data)
-    tokens = re.split("\s+|-", data)
-    return tokens
+    return tokenize_text(data)
 
 # Thinking about meter:
 # In "there once" [was a man from Nantucket], I'd want to see that "there" is unstressed, and "once" is stressed
