@@ -58,33 +58,31 @@ while i < len(tokens):
         word_array.append(next_word)
         syllable_counter += sylct
         phonemes = word_data[next_word]['phonemes']
+
+        # abandon the current limerick-in-progress if we hit a word
+        # with no phoneme data
+        if not phonemes:
+            break
+
         if syllable_counter == 8:
-            if not phonemes:
-                break
             rhyme_scheme['A'] = phonemes
             word_array.append("\n")
         elif syllable_counter == 16:
             word_array.append("\n")
-            if not phonemes:
-                break
             if (not 'A' in rhyme_scheme or not \
                 poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes)):
                 break
         elif syllable_counter == 21:
-            if phonemes == rhyme_scheme['A'] or not phonemes:
+            if phonemes == rhyme_scheme['A']:
                 break
             rhyme_scheme['B'] = phonemes
             word_array.append("\n")
         elif syllable_counter == 26:
             word_array.append("\n")
-            if not phonemes:
-                break
             if (not 'B' in rhyme_scheme or not \
                 poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes)):
                 break
         elif syllable_counter == 35:
-            if not phonemes:
-                break
             if poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
                 limericks.append(word_array)
             break
