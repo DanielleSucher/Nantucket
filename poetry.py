@@ -10,6 +10,22 @@ suffdict = LazyCorpusLoader(
     'cmusuffdict', CMUDictCorpusReader, ['cmusuffdict'])
 suffdict = suffdict.dict()
 
+def try_syllable(syl):
+    ''' helper function for phonemes
+    Tests if syl is in suffdict. If not, removes the first letter
+    and then the first two letters
+    '''
+    if syl in suffdict:
+        return suffdict[syl][0]
+    # else try without the first letter
+    elif syl[1:] in suffdict:
+        return suffdict[syl[1:]][0]
+    # else try without the first 2 letters
+    elif syl[2:] in suffdict:
+        return suffdict[syl[2:]][0]
+    # else return None, which the calling function should check for
+    else:
+        return None
 
 def phonemes(word):
     word = word.lower()
@@ -22,32 +38,21 @@ def phonemes(word):
     if syl_re.search(word):
         last_syl = syl_re.search(word).group()
         n = len(last_syl)
-        if last_syl in suffdict:
-            return suffdict[last_syl][0]
-        # else try without the first letter
-        elif last_syl[1 - n:] in suffdict:
-            return suffdict[last_syl[1 - n:]][0]
-        # else try without the first 2 letters
-        elif last_syl[2 - n:] in suffdict:
-            return suffdict[last_syl[2 - n:]][0]
+        p = try_syllable(last_syl)
+        if p:
+            return p
         # else try without the last 2 letters, if it ends in 's
         elif last_syl[-2:] == "'s":
-            if last_syl[:-2] in suffdict:
-                return suffdict[last_syl[:-2]][0].append('Z')
-            elif last_syl[1 - n:-2] in suffdict:
-                return suffdict[last_syl[1 - n:-2]][0].append('Z')
-            elif last_syl[2 - n:-2] in suffdict:
-                return suffdict[last_syl[2 - n:-2]][0].append('Z')
+            p = try_syllable(last_syl[:-2])
+            if p:
+                return p.append('Z')
             else:
                 return False
         # else try without the last letter, if it ends in s
         elif last_syl[-1] == "s":
-            if last_syl[:-1] in suffdict:
-                return suffdict[last_syl[:-1]][0].append('Z')
-            elif last_syl[1 - n:-1] in suffdict:
-                return suffdict[last_syl[1 - n:-1]][0].append('Z')
-            elif last_syl[2 - n:-1] in suffdict:
-                return suffdict[last_syl[2 - n:-1]][0].append('Z')
+            p = try_syllable(last_syl[:-1])
+            if p:
+                return p.append('Z')
             else:
                 return False
         else:  # If not in cmudict or my cmusuffdict
