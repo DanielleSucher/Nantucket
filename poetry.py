@@ -103,23 +103,22 @@ def rhyme(word1, word2):
     return rhyme_from_phonemes(list1, list2)
 
 
+def tokenize_text(text):
+    text = re.sub("[^a-zA-Z\s'-]", '', text)
+    text = re.sub("'(?![a-z]{1,2})", '', text)
+    tokens = re.split("\s+|-", text)
+    # remove empty tokens
+    tokens = filter(None, tokens)
+    return tokens
+
 def tokenize(file_path):
     with open(file_path) as f:
         data = f.read().strip()
-        data = re.sub("[^a-zA-Z\s'-]", '', data)
-        data = re.sub("'(?![a-z]{1,2})", '', data)
-        tokens = re.split("\s+|-", data)
-    while '' in tokens:
-        tokens.remove('')
-    return tokens
-
+    return tokenize_text(data)
 
 def tokenize_from_url(url):
     data = urllib2.urlopen(url).read().strip()
-    data = re.sub("[^a-zA-Z\s'-]", '', data)
-    data = re.sub("'(?![a-z]{1,2})", '', data)
-    tokens = re.split("\s+|-", data)
-    return tokens
+    return tokenize_text(data)
 
 # Thinking about meter:
 # In "there once" [was a man from Nantucket], I'd want to see that "there" is unstressed, and "once" is stressed

@@ -8,7 +8,6 @@ args = parser.parse_args()
 
 tokens = poetry.tokenize(args.text)
 
-
 def overflows_line(syllable_counter, current_sylct):
     ''' return true if the word would overflow the line '''
 
@@ -48,9 +47,6 @@ word_data = {}
 
 i = 0
 while i < len(tokens):
-    if tokens[i] == '':
-        tokens.remove('')
-        continue
     start_word = tokens[i]
     if not start_word in word_data:
         word_data[start_word] = new_word_data(start_word)
@@ -62,9 +58,6 @@ while i < len(tokens):
     n = i + 1
     rhyme_scheme = {}  # Tracks the rhyme scheme
     while n < len(tokens):
-        if tokens[n] == '':
-            tokens.remove('')
-            continue
         next_word = tokens[n]
         if not next_word in word_data:
             word_data[next_word] = new_word_data(next_word)
