@@ -11,9 +11,9 @@ suffdict = LazyCorpusLoader(
 suffdict = suffdict.dict()
 
 def try_syllable(syl):
-    ''' helper function for phonemes
+    ''' helper function for phonemes()
     Tests if syl is in suffdict. If not, removes the first letter
-    and then the first two letters
+    and then the first two letters, checking each time
     '''
     if syl in suffdict:
         return suffdict[syl][0]
@@ -33,31 +33,34 @@ def phonemes(word):
     if word in d:
         return min(d[word], key=len)
 
-    # Use my cmu-based last syllable dictionary
+    # If not, try to use my cmu-based last syllable dictionary
+
+    # if we cannot detect the last syllable, give up
     syl_re = re.compile("([bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)")
-    if syl_re.search(word):
-        last_syl = syl_re.search(word).group()
-        n = len(last_syl)
-        p = try_syllable(last_syl)
+    if not syl_re.search(word):
+        return False
+
+    last_syl = syl_re.search(word).group()
+
+    # now try the last syllable against cmusuffdict
+    p = try_syllable(last_syl)
+    if p:
+        return p
+    # else try without the last 2 letters, if it ends in 's
+    elif last_syl[-2:] == "'s":
+        p = try_syllable(last_syl[:-2])
         if p:
-            return p
-        # else try without the last 2 letters, if it ends in 's
-        elif last_syl[-2:] == "'s":
-            p = try_syllable(last_syl[:-2])
-            if p:
-                return p.append('Z')
-            else:
-                return False
-        # else try without the last letter, if it ends in s
-        elif last_syl[-1] == "s":
-            p = try_syllable(last_syl[:-1])
-            if p:
-                return p.append('Z')
-            else:
-                return False
-        else:  # If not in cmudict or my cmusuffdict
+            return p.append('Z')
+        else:
             return False
-    else:
+    # else try without the last letter, if it ends in s
+    elif last_syl[-1] == "s":
+        p = try_syllable(last_syl[:-1])
+        if p:
+            return p.append('Z')
+        else:
+            return False
+    else:  # If not in cmudict or my cmusuffdict
         return False
 
 
