@@ -12,10 +12,11 @@ suffdict = suffdict.dict()
 
 
 def phonemes(word):
-    if not word.lower() in d:
+    word = word.lower()
+    if not word in d:
         # Use my cmu-based last syllable dictionary
-        if re.search("((?i)[bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()):
-            last_syl = re.search("((?i)[bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word.lower()).group()
+        if re.search("([bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word):
+            last_syl = re.search("([bcdfghjklmnpqrstvwxz]{1,2}[aeiouy]+[bcdfghjklmnpqrstvwxz]*(e|ed)?('[a-z]{1,2})?)(?![a-zA-Z]+)", word).group()
             if last_syl in suffdict:
                 return suffdict[last_syl][0]
             # else try without the first letter
@@ -49,7 +50,7 @@ def phonemes(word):
         else:
             return False
     # If in cmudict, just use cmudict
-    return min(d[word.lower()], key=len)
+    return min(d[word], key=len)
 
 
 def approx_nsyl(word):
