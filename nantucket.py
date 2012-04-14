@@ -41,7 +41,11 @@ def check_rhyme(rhyme_scheme, line, phonemes):
     return poetry.rhyme_from_phonemes(rhyme_scheme[line], phonemes)
 
 limericks = []
+
+# Store the syllable count and phonemes for words we encounter
+# Uses more space in exchange for getting more speed
 word_data = {}
+
 i = 0
 while i < len(tokens):
     if tokens[i] == '':
@@ -50,9 +54,10 @@ while i < len(tokens):
     start_word = tokens[i]
     if not start_word in word_data:
         word_data[start_word] = new_word_data(start_word)
-        # Uses more space in exchange for getting more speed
+
+    # Holds the actual words of the potential limerick
     word_array = [start_word]
-        # Holds the actual words of the potential limerick
+
     syllable_counter = word_data[start_word]['sylct']
     n = i + 1
     rhyme_scheme = {}  # Tracks the rhyme scheme
@@ -64,8 +69,11 @@ while i < len(tokens):
         if not next_word in word_data:
             word_data[next_word] = new_word_data(next_word)
         sylct = word_data[next_word]['sylct']
+
+        # break out if a word overflows the line
         if overflows_line(syllable_counter, sylct):
-            break  # break out if a word overflows the line
+            break
+
         word_array.append(next_word)
         syllable_counter += sylct
         phonemes = word_data[next_word]['phonemes']
