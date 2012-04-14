@@ -9,17 +9,20 @@ args = parser.parse_args()
 tokens = poetry.tokenize(args.text)
 
 
-def overflows_line(syllable_counter, current_sylct):  # return true if the word would overflow the line
-    if syllable_counter < 8 and current_sylct > 8 - syllable_counter:
+def overflows_line(syllable_counter, current_sylct):
+    ''' return true if the word would overflow the line '''
+
+    # see what the new syllable count would be if we added this word
+    new_sylct = syllable_counter + current_sylct
+
+    # iterate through the syllable counts marking the end of each of the five
+    # lines in a standard limerick. for each line, check if the old syllable
+    # count has not exceeded that line and the new one has
+    line_endings = [8, 16, 21, 26, 35]
+    for count in line_endings:
+      if syllable_counter < count and new_sylct > count:
         return True
-    elif syllable_counter < 16 and current_sylct > 16 - syllable_counter:
-        return True
-    elif syllable_counter < 21 and current_sylct > 21 - syllable_counter:
-        return True
-    elif syllable_counter < 26 and current_sylct > 26 - syllable_counter:
-        return True
-    elif syllable_counter < 35 and current_sylct > 35 - syllable_counter:
-        return True
+
     return False
 
 
