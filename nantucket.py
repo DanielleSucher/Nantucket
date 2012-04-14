@@ -29,6 +29,17 @@ def new_word_data(word):
     ''' return a dict with the syllable count and phonemes in the word '''
     return {"sylct": poetry.nsyl(word), "phonemes": poetry.phonemes(word)}
 
+def check_rhyme(rhyme_scheme, line, phonemes):
+    ''' rhyme_scheme: a dict of end rhymes for the current limerick, of the form
+                        {'A': phoneme, 'B': phoneme}
+        line:         position of line whose ending we are checking ('A' or 'B')
+        phonemes:     the phoneme ending the current line, to check against rhyme_scheme
+    '''
+    if not line in rhyme_scheme:
+        return False
+
+    return poetry.rhyme_from_phonemes(rhyme_scheme[line], phonemes)
+
 limericks = []
 word_data = {}
 i = 0
@@ -69,8 +80,7 @@ while i < len(tokens):
             word_array.append("\n")
         elif syllable_counter == 16:
             word_array.append("\n")
-            if (not 'A' in rhyme_scheme or not \
-                poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes)):
+            if not check_rhyme(rhyme_scheme, 'A', phonemes):
                 break
         elif syllable_counter == 21:
             if phonemes == rhyme_scheme['A']:
@@ -79,11 +89,10 @@ while i < len(tokens):
             word_array.append("\n")
         elif syllable_counter == 26:
             word_array.append("\n")
-            if (not 'B' in rhyme_scheme or not \
-                poetry.rhyme_from_phonemes(rhyme_scheme['B'], phonemes)):
+            if not check_rhyme(rhyme_scheme, 'B', phonemes):
                 break
         elif syllable_counter == 35:
-            if poetry.rhyme_from_phonemes(rhyme_scheme['A'], phonemes):
+            if check_rhyme(rhyme_scheme, 'A', phonemes):
                 limericks.append(word_array)
             break
         n += 1
