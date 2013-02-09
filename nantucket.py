@@ -90,7 +90,7 @@ def find_limericks(tokens, linebreak):
                 if not check_rhyme(rhyme_scheme, 'A', phonemes):
                     break
             elif syllable_counter == 21:
-                if phonemes == rhyme_scheme['A']:
+                if 'A' not in rhyme_scheme or phonemes == rhyme_scheme['A']:
                     break
                 rhyme_scheme['B'] = phonemes
                 word_array.append(linebreak)
